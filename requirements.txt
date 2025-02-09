@@ -1,0 +1,6 @@
+# Computer vision task
+opencv-python==4.11.0.86
+
+# Development dependencies
+black==25.1.0
+isort==6.0.0
