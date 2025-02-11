@@ -35,6 +35,24 @@ def is_valid_extension(file_path: str, extensions: list[str]) -> bool:
     return file_extension.lower().lstrip(".") in extensions
 
 
+def parse_label_file(label_path: str) -> list[tuple[float, float, float, float, float]]:
+    """
+    Parses a YOLO format label file and extracts bounding box data.
+
+    Args:
+        label_path (str): Path to the label file.
+
+    Returns:
+        list[tuple]: List of bounding box data as (class_id, x_center, y_center, width, height).
+    """
+    bounding_boxes = []
+    with open(label_path, "r") as label_file:
+        for line in label_file:
+            data = line.strip().split()
+            bounding_boxes.append(tuple(map(float, data)))
+    return bounding_boxes
+
+
 def rename_file(
     file_path: str, new_name: str, extensions: list[str], counter: int = 0
 ) -> bool:
