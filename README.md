@@ -13,9 +13,8 @@
 
 `dataset-tools` is a modular utility toolkit for managing datasets in machine learning and AI applications. It simplifies common tasks such as:
 
-- Converting labels between formats (e.g., YOLO TXT, XML, etc.).
+- Converting labels between formats (e.g., YOLO TXT.).
 - Visualizing bounding boxes on images from annotation files.
-- Splitting datasets into training, validation, and testing sets.
 - Renaming and organizing dataset files.
 
 `Tech` used in this repository:
@@ -42,6 +41,14 @@ Follow these steps to set up the project locally:
     ```bash
     pip install -r requirements.txt
     ```
+    
+---
+
+### Examples
+
+If you want to see how to use specific functions, navigate to the `examples` folder:
+
+- **`draw_bboxes_demo.py`**: Demonstrates how to draw bounding boxes from YOLO TXT format annotations onto images using OpenCV and save the resulting images.
 
 ---
 
