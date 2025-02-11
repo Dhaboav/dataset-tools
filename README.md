@@ -42,3 +42,21 @@ Follow these steps to set up the project locally:
     ```bash
     pip install -r requirements.txt
     ```
+
+---
+
+### Troubleshooting
+
+#### Resolving Module Import Errors in VSCode
+To fix **module import errors** in the `examples` folder, set `PYTHONPATH` in your VSCode settings so Python recognizes the project's root directory.
+
+1. Open `Preferences: Open User Settings (JSON)` via `Ctrl+Shift+P` in VSCode.
+
+2. Add this configuration:
+
+   ```json
+   {
+       "terminal.integrated.env.windows": {
+           "PYTHONPATH": "${workspaceFolder}"
+       }
+   }
