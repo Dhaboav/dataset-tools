@@ -59,7 +59,7 @@ def process_dataset(images_folder: str, labels_folder: str, output_folder: str) 
 
 
 if __name__ == "__main__":
-    # Change this 3 path with your path
+    # Change these paths to your actual paths
     process_dataset(
         images_folder="datasets/train/images",
         labels_folder="datasets/train/labels",

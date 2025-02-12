@@ -1,4 +1,5 @@
 import os
+import random
 
 
 def get_files(folder_path: str) -> list[str] | None:
@@ -17,6 +18,23 @@ def get_files(folder_path: str) -> list[str] | None:
         os.path.join(folder_path, file)
         for file in os.listdir(folder_path)
         if os.path.isfile(os.path.join(folder_path, file))
+    ]
+
+
+def get_files_names(folder_path: str) -> list[str]:
+    """
+    Load file names from a specified directory.
+
+    Args:
+        folder_path (str): Path to the directory containing label files.
+
+    Returns:
+        list[str]: List of file names without extensions.
+    """
+    return [
+        os.path.splitext(f)[0]
+        for f in os.listdir(folder_path)
+        if os.path.isfile(os.path.join(folder_path, f))
     ]
 
 
@@ -100,6 +118,48 @@ def retrieve_files(folder_path: str, extensions: list[str]) -> list[str]:
         return []
 
     return [file for file in files if is_valid_extension(file, extensions)]
+
+
+def save_to_file(file_names: list[str], file_path: str):
+    """
+    Save file names to a specified text file.
+
+    Args:
+        file_names (list[str]): List of file names to be saved.
+        file_path (str): Path to the output text file.
+    """
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+    with open(file_path, "w") as file:
+        for name in file_names:
+            file.write(f"{name}\n")
+
+
+def split_dataset(
+    file_names: list[str], train_ratio: float = 0.7, val_ratio: float = 0.2
+) -> tuple[list[str], list[str], list[str]]:
+    """
+    Split dataset into training, validation, and test sets.
+
+    Args:
+        file_names (list[str]): List of file names to be split.
+        train_ratio (float): Ratio of training set. Default is 0.8.
+        val_ratio (float): Ratio of validation set. Default is 0.1.
+
+    Returns:
+        tuple: Three lists containing training, validation, and test sets.
+    """
+    random.shuffle(file_names)
+    num_samples = len(file_names)
+    num_train = int(num_samples * train_ratio)
+    num_val = int(num_samples * val_ratio)
+
+    train_set = file_names[:num_train]
+    val_set = file_names[num_train : num_train + num_val]
+    test_set = file_names[num_train + num_val :]
+
+    return train_set, val_set, test_set
 
 
 def _perform_rename(source: str, destination: str) -> bool:
