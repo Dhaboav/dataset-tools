@@ -20,6 +20,7 @@
 `Tech` used in this repository:
 - `isort` and `black` keep the code consistent and clean.
 - `OpenCV` handles computer vision tasks.
+- `python-dotenv` handles any settings in project.
 
 ---
 
@@ -41,6 +42,14 @@ Follow these steps to set up the project locally:
     ```bash
     pip install -r requirements.txt
     ```
+
+3. **Create .env file:**
+
+    Copy .env.example using `cmd prompt` and change its values:
+    
+    ```bash
+    copy .env.example .env
+    ```
     
 ---
 
@@ -49,6 +58,7 @@ Follow these steps to set up the project locally:
 If you want to see how to use specific functions, navigate to the `examples` folder:
 
 - **`draw_bboxes_demo.py`**: Demonstrates how to draw bounding boxes from YOLO TXT format annotations onto images using OpenCV and save the resulting images.
+- **`rename_demo.py`**: Demonstrates how to renaming files.
 - **`split_dataset_demo.py`**: Demonstrates how to split datasets into training, validation, and test sets with proportions of 70%, 20%, and 10%, respectively.
 
 ---
