@@ -1,3 +1,4 @@
+import itertools
 import os
 import random
 
@@ -53,24 +54,6 @@ def is_valid_extension(file_path: str, extensions: list[str]) -> bool:
     return file_extension.lower().lstrip(".") in extensions
 
 
-def parse_label_file(label_path: str) -> list[tuple[float, float, float, float, float]]:
-    """
-    Parses a YOLO format label file and extracts bounding box data.
-
-    Args:
-        label_path (str): Path to the label file.
-
-    Returns:
-        list[tuple]: List of bounding box data as (class_id, x_center, y_center, width, height).
-    """
-    bounding_boxes = []
-    with open(label_path, "r") as label_file:
-        for line in label_file:
-            data = line.strip().split()
-            bounding_boxes.append(tuple(map(float, data)))
-    return bounding_boxes
-
-
 def rename_file(
     file_path: str, new_name: str, extensions: list[str], counter: int = 0
 ) -> bool:
@@ -92,14 +75,15 @@ def rename_file(
     directory, _ = os.path.split(file_path)
     _, file_extension = os.path.splitext(file_path)
 
-    # Generate new file name and path
-    new_file_name = f"{new_name}-{counter}{file_extension}"
-    new_file_path = os.path.join(directory, new_file_name)
+    for counter in itertools.count(counter):
+        # Generate new file name and path
+        new_file_name = f"{new_name}-{counter}{file_extension}"
+        new_file_path = os.path.join(directory, new_file_name)
 
-    if os.path.exists(new_file_path):
-        return False
+        if not os.path.exists(new_file_path):
+            return _perform_rename(file_path, new_file_path)
 
-    return _perform_rename(file_path, new_file_path)
+    return False
 
 
 def retrieve_files(folder_path: str, extensions: list[str]) -> list[str]:
@@ -118,6 +102,24 @@ def retrieve_files(folder_path: str, extensions: list[str]) -> list[str]:
         return []
 
     return [file for file in files if is_valid_extension(file, extensions)]
+
+
+def _perform_rename(source: str, destination: str) -> bool:
+    """
+    Performs the actual renaming operation.
+
+    Args:
+        source (str): Current file path.
+        destination (str): New file path.
+
+    Returns:
+        bool: True if the renaming was successful, False otherwise.
+    """
+    try:
+        os.rename(source, destination)
+        return True
+    except OSError:
+        return False
 
 
 def save_to_file(file_names: list[str], file_path: str):
@@ -162,19 +164,19 @@ def split_dataset(
     return train_set, val_set, test_set
 
 
-def _perform_rename(source: str, destination: str) -> bool:
+def parse_label_file(label_path: str) -> list[tuple[float, float, float, float, float]]:
     """
-    Performs the actual renaming operation.
+    Parses a YOLO format label file and extracts bounding box data.
 
     Args:
-        source (str): Current file path.
-        destination (str): New file path.
+        label_path (str): Path to the label file.
 
     Returns:
-        bool: True if the renaming was successful, False otherwise.
+        list[tuple]: List of bounding box data as (class_id, x_center, y_center, width, height).
     """
-    try:
-        os.rename(source, destination)
-        return True
-    except Exception as e:
-        return False
+    bounding_boxes = []
+    with open(label_path, "r") as label_file:
+        for line in label_file:
+            data = line.strip().split()
+            bounding_boxes.append(tuple(map(float, data)))
+    return bounding_boxes
